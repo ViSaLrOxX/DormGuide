@@ -4,7 +4,7 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from decimal import Decimal
 from .models import UserProfile
-
+from django.contrib.auth import get_user_model
 
 class University(models.Model):
     name = models.CharField(max_length=128)
@@ -69,7 +69,7 @@ class Review(models.Model):
     likes = models.PositiveIntegerField(default=0)
     rating = models.DecimalField(max_digits=2, decimal_places=1)
     accommodation = models.ForeignKey(Accommodation, on_delete=models.CASCADE)
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
     def clean(self):
         if self.rating < 0 or self.rating > 5:
@@ -81,7 +81,3 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
-
-
-        
-    
