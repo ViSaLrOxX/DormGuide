@@ -65,7 +65,7 @@ class Review(models.Model):
     likes = models.PositiveIntegerField(default=0)
     rating = models.DecimalField(max_digits=2, decimal_places=1)
     accommodation = models.ForeignKey(Accommodation, on_delete=models.CASCADE)
-    user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)  # Using a string reference here
+    user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)  
 
     def clean(self):
         if self.rating < 0 or self.rating > 5:
@@ -83,6 +83,16 @@ class Location(models.Model):
     name = models.CharField(max_length=128)
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
+
+    def __str__(self):
+        return self.name
+
+class Property(models.Model):
+    name = models.CharField(max_length=128)
+    description = models.TextField()
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=9, decimal_places=2)
+    
 
     def __str__(self):
         return self.name
