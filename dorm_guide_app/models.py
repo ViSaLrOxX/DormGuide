@@ -61,7 +61,7 @@ class Accommodation(models.Model):
 
 class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    property = models.ForeignKey(Property, on_delete=models.CASCADE)  
+    property = models.ForeignKey(property, on_delete=models.CASCADE)  
     rating = models.IntegerField()
     comment = models.TextField()
     picture = models.ImageField(upload_to='review_pictures/', null=True, blank=True) 
