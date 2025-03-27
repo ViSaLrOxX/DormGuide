@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - DormGuide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+        .container {
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .profile-header img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+        .profile-info input {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .edit-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .favorite-properties {
+            margin-top: 20px;
+        }
+        .favorite-properties h2 {
+            margin-bottom: 10px;
+        }
+        .favorite-properties img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .contact-button {
+            margin-top: 20px;
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .contact-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-header">
+            <img src="DormGuide/media/profile-placeholder.jpg" alt="Profile Picture">
+            <div class="profile-info">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" value="UserName123" readonly>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="user@example.com" readonly>
+            </div>
+            <button class="edit-button">Edit Profile</button>
+        </div>
+        <div class="favorite-properties">
+            <h2>Favorite Properties</h2>
+            <img src="DormGuide/media/property-placeholder.jpg" alt="Favorite Property 1">
+            <img src="DormGuide/media/property-placeholder.jpg" alt="Favorite Property 2">
+        </div>
+        <button class="contact-button" onclick="window.location.href='contactus.html'">Contact Us</button>
+    </div>
+</body>
+</html>

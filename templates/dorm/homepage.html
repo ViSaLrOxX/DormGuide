@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DormGuide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: grey;
+            padding: 20px;
+            border-bottom: 1px solid grey;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        header h1 {
+            display: inline;
+            font-size: 24px;
+            margin: 0;
+        }
+        header img {
+            width: 50px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        .navigation {
+            margin-top: 10px;
+            display: flex;
+        }
+        .navigation button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: red;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .navigation button:hover {
+            background-color: darkred;
+        }
+        .container {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container h2 {
+            color: red;
+            font-size: 24px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .search-section {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .search-section input {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid grey;
+            border-radius: 5px;
+            text-align: center;
+        }
+        footer {
+            background-color: white;
+            padding: 10px;
+            border-top: 1px solid white;
+            display: flex;
+            justify-content: space-between;
+        }
+        footer button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: red;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        footer button:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <img src="{% static 'images/icon.png' %}" alt="Icon" />
+            <h1>DormGuide</h1>
+        </div>
+        <div class="navigation">
+            <button onclick="window.location.href='login.html'">Login</button>
+            <button onclick="window.location.href='signup.html'">Sign Up</button>
+            <button onclick="window.location.href='user_profile.html'">User Profile</button>
+        </div>
+    </header>
+    <div class="container">
+        <h2>More than a room - Your Student Life Starts Here</h2>
+        <div class="search-section">
+            <input type="text" placeholder="Search Accommodations">
+        </div>
+        <div class="search-section">
+            <input type="text" placeholder="Recent Searches (Logged-in users only)">
+        </div>
+        <div class="search-section">
+            <input type="text" placeholder="Favourites (Logged-in users only)">
+        </div>
+        <div class="search-section">
+            <input type="text" placeholder="Popular Properties">
+        </div>
+    </div>
+    <footer>
+        <button onclick="window.location.href='contactus.html'" class="contact">Contact Us</button>
+        <button onclick="window.location.href='faq.html'" class="help">Help</button>
+    </footer>
+</body>
+</html>
