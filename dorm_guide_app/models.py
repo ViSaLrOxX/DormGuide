@@ -4,8 +4,7 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from decimal import Decimal
 from django.contrib.auth import get_user_model
-from dorm_guide_app.models import Property  
-from django.apps import apps
+from django.apps import apps 
 
 class University(models.Model):
     name = models.CharField(max_length=128)
@@ -75,39 +74,6 @@ class Review(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    current_student = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.user.username
-
-class Location(models.Model):
-    name = models.CharField(max_length=128)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6)
-
-    def __str__(self):
-        return self.name
-
-class Property(models.Model):
-    name = models.CharField(max_length=128)
-    description = models.TextField()
-    location = models.ForeignKey(Location, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=9, decimal_places=2)
-    
-
-    def __str__(self):
-        return self.name
-    
-class Favourites(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    accommodation = models.ForeignKey(Accommodation, on_delete=models.CASCADE)
-    date_added = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.user.username} - {self.accommodation.name}"
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
@@ -120,3 +86,32 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f'{self.user.username} Profile'
+
+
+class Location(models.Model):
+    name = models.CharField(max_length=128)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+
+    def __str__(self):
+        return self.name
+
+
+class Property(models.Model):
+    name = models.CharField(max_length=128)
+    description = models.TextField()
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=9, decimal_places=2)
+    
+    def __str__(self):
+        return self.name
+
+
+class Favourites(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    accommodation = models.ForeignKey(Accommodation, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.accommodation.name}"
+
