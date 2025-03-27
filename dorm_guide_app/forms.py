@@ -46,11 +46,10 @@ class PropertyForm(forms.ModelForm):
             'photo': 'Property Photo (optional)',
         }
 
-
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ['property', 'title', 'description', 'picture', 'rating', 'is_anonymous']
+        fields = ['user', 'property', 'rating', 'comment', 'picture', 'is_anonymous']
         widgets = {
             'property': forms.HiddenInput(),
             'title': forms.TextInput(attrs={'placeholder': 'Title', 'class': 'form-control'}),
