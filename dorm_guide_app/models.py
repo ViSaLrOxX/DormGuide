@@ -4,7 +4,7 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from decimal import Decimal
 from django.contrib.auth import get_user_model
-
+from dorm_guide_app.models import Property  
 
 class University(models.Model):
     name = models.CharField(max_length=128)
@@ -104,3 +104,15 @@ class Favourites(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.accommodation.name}"
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    favourite_properties = models.ManyToManyField(Property, blank=True)
+
+    def __str__(self):
+        return f'{self.user.username} Profile'
