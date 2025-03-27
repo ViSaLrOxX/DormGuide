@@ -113,9 +113,10 @@ class UserProfile(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=15)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+
     favourite_properties = models.ManyToManyField(
         apps.get_model('dorm_guide_app', 'Property'), blank=True
     )
 
     def __str__(self):
-        return f'{self.user.username} Profile' 
+        return f'{self.user.username} Profile'
