@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import UserProfile, Review, Property, Favourites, Location
 
-
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
 
@@ -15,13 +14,10 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ('first_name', 'last_name', 'email', 'phone', 'profile_picture', 'favourite_properties')
 
-
-
 class LocationForm(forms.ModelForm):
     class Meta:
         model = Location
         fields = ('latitude', 'longitude')
-
 
 class PropertyForm(forms.ModelForm):
     class Meta:
@@ -72,12 +68,7 @@ class ReviewForm(forms.ModelForm):
         self.fields['property'].required = False
         self.fields['picture'].required = False
 
-
 class FavouritesForm(forms.ModelForm):
     class Meta:
         model = Favourites
-        fields = ['user', 'property']
-        widgets = {
-            'user': forms.HiddenInput(),
-            'property': forms.HiddenInput(),
-        }
+        fields = ['user', 'accommodation']
