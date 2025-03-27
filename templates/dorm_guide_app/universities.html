@@ -1,0 +1,71 @@
+{% extends 'dorm_guide_app/base.html' %}
+
+{% block title_block %}
+    Universities
+{% endblock %}
+
+{% block content %}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'dormguide:index' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Universities</li>
+    </ol>
+</nav>
+
+
+<div class="row mb-3 text-center">
+    <h2 class="mb-3 text-primary"><b>Universities</b></h2>
+    <p class="text-muted">
+        <em>All universities hosted by DormGuide are not endorsed. We do not receive compensation from these universities nor do we alter reviews.</em>
+    </p>
+</div>
+
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for u in universities %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            
+            <a href="{% url 'dormguide:university' u.slug %}" style="text-decoration: none; color: inherit;">
+                <img src="{% if u.picture %}{{ MEDIA_URL }}{{ u.picture }}{% else %}{{ STATIC_URL }}/images/uni_default.jpg{% endif %}" 
+                     class="card-img-top" 
+                     alt="{{ u.name }}">
+            </a>
+
+            
+            <div class="card-body">
+                <h5 class="card-title"><b>{{ u.name }}</b></h5>
+                <p class="card-text">{{ u.synopsis }}</p>
+            </div>
+
+            
+            {% if accommodations %}
+            <ul class="list-group list-group-flush">
+                {% for a in accommodations %}
+                {% if a.university == u %}
+                <li class="list-group-item">
+                    <a href="{% url 'dormguide:accommodation' u.slug a.slug %}" class="text-decoration-none">
+                        {{ a.name }}
+                    </a>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            
+            <div class="card-footer">
+                <a href="{{ u.website }}" target="_blank" class="btn btn-outline-primary w-100">
+                    University Website
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-center text-muted">No universities available at the moment.</p>
+    {% endfor %}
+</div>
+{% endblock %}
