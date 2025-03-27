@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.db.models import Avg, Q
-from dorm_guide.models import University, Accommodation, Review
-from dorm_guide.forms import ReviewForm
+from dorm_guide_app.models import University, Accommodation, Review
+from dorm_guide_app.forms import ReviewForm
 from .forms import UserProfileForm
 
 logger = logging.getLogger(__name__)
