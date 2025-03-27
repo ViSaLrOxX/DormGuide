@@ -1,120 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frequently Asked Questions - DormGuide</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        header {
-            background-color: grey;
-            padding: 20px;
-            text-align: center;
-            color: white;
-            font-size: 24px;
-        }
-        .container {
-            width: 80%;
-            max-width: 800px;
-            margin: 20px auto;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            flex: 1;
-        }
-        h2 {
-            text-align: center;
-            color: red;
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
-        .faq {
-            margin-bottom: 20px;
-        }
-        .faq h3 {
-            font-size: 18px;
-            color: #007bff;
-            cursor: pointer;
-            margin: 0;
-        }
-        .faq p {
-            display: none;
-            font-size: 16px;
-            margin-top: 5px;
-            color: #333;
-            line-height: 1.5;
-        }
-        .faq.open p {
-            display: block;
-        }
-        footer {
-            background-color: white;
-            padding: 20px;
-            text-align: center;
-            border-top: 1px solid grey;
-        }
-        footer button {
-            background-color: red;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        footer button:hover {
-            background-color: darkred;
-        }
-    </style>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const questions = document.querySelectorAll('.faq h3');
-            questions.forEach(question => {
-                question.addEventListener('click', () => {
-                    question.parentElement.classList.toggle('open');
-                });
-            });
-        });
-    </script>
-</head>
-<body>
-    <header>
-        DormGuide FAQs
-    </header>
-    <div class="container">
-        <h2>Frequently Asked Questions</h2>
-        <div class="faq">
-            <h3>What is DormGuide?</h3>
+{% extends 'dorm_guide_app/base.html' %}
+
+{% block title_block %}
+    FAQ
+{% endblock %}
+
+{% block content %}
+<section class="container my-5">
+    <div class="text-center mb-4">
+        <h2 class="text-primary fw-bold">Frequently Asked Questions</h2>
+        <p class="lead">Here are some answers to our most common queries.</p>
+    </div>
+
+    <div class="row justify-content-center g-4">
+        
+        <div class="col-md-5 col-lg-4 shadow-sm p-4 bg-body rounded">
+            <h6 class="text-primary mb-3"><i class="fas fa-info-circle"></i> What is DormGuide?</h6>
             <p>DormGuide is a platform designed to help students find the best accommodations for their needs, offering user-friendly search and review features.</p>
         </div>
-        <div class="faq">
-            <h3>How do I create an account?</h3>
-            <p>You can create an account by clicking the "Sign Up" button on the homepage and filling in your details, such as name, email, and password.</p>
+
+        <div class="col-md-5 col-lg-4 shadow-sm p-4 bg-body rounded">
+            <h6 class="text-primary mb-3"><i class="fas fa-user-plus"></i> How do I create an account?</h6>
+            <p>Click the "Sign Up" button on the homepage and fill in your details, such as name, email, and password.</p>
         </div>
-        <div class="faq">
-            <h3>How do I add properties to my favorites?</h3>
+
+        <div class="col-md-5 col-lg-4 shadow-sm p-4 bg-body rounded">
+            <h6 class="text-primary mb-3"><i class="fas fa-heart"></i> How do I add properties to my favorites?</h6>
             <p>Once logged in, click the heart icon or "Add to Favorites" button on a property listing to save it to your profile.</p>
         </div>
-        <div class="faq">
-            <h3>Can I contact property owners through DormGuide?</h3>
+
+        <div class="col-md-5 col-lg-4 shadow-sm p-4 bg-body rounded">
+            <h6 class="text-primary mb-3"><i class="fas fa-comments"></i> Can I contact property owners through DormGuide?</h6>
             <p>Yes, you can contact property owners through the "Contact" button provided on each property listing page.</p>
         </div>
-        <div class="faq">
-            <h3>How do I remove a property from my favorites?</h3>
+
+        <div class="col-md-5 col-lg-4 shadow-sm p-4 bg-body rounded">
+            <h6 class="text-primary mb-3"><i class="fas fa-trash-alt"></i> How do I remove a property from my favorites?</h6>
             <p>Go to your profile, locate the property under your favorite listings, and click the "Remove" button.</p>
         </div>
     </div>
-    <footer>
-        <button onclick="window.location.href='contactus.html'">Contact Us</button>
-    </footer>
-</body>
-</html>
+
+    <div class="text-center mt-5">
+        <a href="{% url 'dormguide:contact_us' %}" class="btn btn-danger px-4 py-2">
+            Contact Us for More Help
+        </a>
+    </div>
+</section>
+{% endblock %}
+
