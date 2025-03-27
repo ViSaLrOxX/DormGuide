@@ -4,7 +4,7 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from decimal import Decimal
 from django.contrib.auth import get_user_model
-from django.apps import apps 
+from django.apps import apps  
 
 class University(models.Model):
     name = models.CharField(max_length=128)
@@ -81,7 +81,7 @@ class UserProfile(models.Model):
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
 
     favourite_properties = models.ManyToManyField(
-        apps.get_model('dorm_guide_app', 'Property'), blank=True
+        'Property', blank=True
     )
 
     def __str__(self):
