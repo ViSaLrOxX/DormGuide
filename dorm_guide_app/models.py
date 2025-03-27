@@ -2,10 +2,8 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 from django.contrib.auth.models import User
-from decimal import Decimal
 from django.contrib.auth import get_user_model
-from django.apps import apps  
-from .property_model import Property
+from decimal import Decimal
 
 class University(models.Model):
     name = models.CharField(max_length=128)
@@ -60,15 +58,24 @@ class Accommodation(models.Model):
             raise ValidationError("Rent Min cannot be greater than Rent Max.")
 
 
+class Location(models.Model):
+    name = models.CharField(max_length=128)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+
+    def __str__(self):
+        return self.name
+
+
 class Property(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField()
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=9, decimal_places=2)
-    is_available = models.BooleanField(default=True)  
-    photo = models.ImageField(upload_to='property_images/', blank=True, null=True)  
-    price_per_month = models.DecimalField(max_digits=9, decimal_places=2)  
-    address = models.CharField(max_length=255, blank=True) 
+    is_available = models.BooleanField(default=True)
+    photo = models.ImageField(upload_to='property_images/', blank=True, null=True)
+    price_per_month = models.DecimalField(max_digits=9, decimal_places=2)
+    address = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.name
@@ -76,7 +83,7 @@ class Property(models.Model):
 
 class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    property = models.ForeignKey(Property, on_delete=models.CASCADE) 
+    property = models.ForeignKey(Property, on_delete=models.CASCADE)
     rating = models.IntegerField()
     comment = models.TextField()
     picture = models.ImageField(upload_to='review_pictures/', null=True, blank=True)
@@ -95,20 +102,11 @@ class UserProfile(models.Model):
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
 
     favourite_properties = models.ManyToManyField(
-        'Property', blank=True
+        Property, blank=True
     )
 
     def __str__(self):
         return f'{self.user.username} Profile'
-
-
-class Location(models.Model):
-    name = models.CharField(max_length=128)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6)
-
-    def __str__(self):
-        return self.name
 
 
 class Favourites(models.Model):
