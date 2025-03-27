@@ -1,44 +1,100 @@
+import logging
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Property, UserProfile, Favourites
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+from django.http import JsonResponse
+from django.core.paginator import Paginator
+from django.db.models import Avg, Q
+from dorm_guide.models import University, Accommodation, Review
+from dorm_guide.forms import ReviewForm
+
+logger = logging.getLogger(__name__)
+
+
+def index(request):
+    """Home page showing university listings."""
+    universities = University.objects.all().order_by('name')
+
+    paginator = Paginator(universities, 5)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    logger.info(f"Loaded index page with {universities.count()} universities.")
+    return render(request, 'dorm_guide/index.html', {'page_obj': page_obj})
+
+
+def university_detail(request, university_id):
+    """Displays details for a single university."""
+    university = get_object_or_404(University, id=university_id)
+    accommodations = university.accommodation_set.all()
+
+    logger.info(f"Viewing details for {university.name} with {accommodations.count()} accommodations.")
+    return render(request, 'dorm_guide/university_detail.html', {'university': university, 'accommodations': accommodations})
+
 
 @login_required
-def user_profile(request):
-    try:
-        profile = UserProfile.objects.get(user=request.user)
-        favourite_properties = Favourites.objects.filter(user=request.user)
-    except UserProfile.DoesNotExist:
-        messages.error(request, "User profile not found.")
-        return redirect('home')
+def accommodation_detail(request, accommodation_id):
+    """Shows detailed view of an accommodation."""
+    accommodation = get_object_or_404(Accommodation, id=accommodation_id)
+    reviews = accommodation.review_set.all().order_by('-created_at')
 
-    context = {
-        'profile': profile,
-        'favourite_properties': favourite_properties,
-    }
-    return render(request, 'user_profile.html', context)
+    paginator = Paginator(reviews, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
-@login_required
-def add_to_favourites(request, property_id):
-    property = get_object_or_404(Property, id=property_id)
-    favourite = Favourites.objects.get_or_create(user=request.user, property=property)
-    
-    if favourite:
-        messages.success(request, f"{property.name} has been added to your favourites!")
-    else:
-        messages.info(request, f"{property.name} is already in your favourites.")
+    form = ReviewForm()
 
-    return redirect('user_profile')
+    logger.info(f"Viewing accommodation {accommodation.name} with {reviews.count()} reviews.")
+    return render(
+        request,
+        'dorm_guide/accommodation_detail.html',
+        {'accommodation': accommodation, 'page_obj': page_obj, 'form': form}
+    )
+
 
 @login_required
-def remove_from_favourites(request, property_id):
-    property = get_object_or_404(Property, id=property_id)
-    favourite = Favourites.objects.filter(user=request.user, property=property)
-    
-    if favourite.exists():
-        favourite.delete()
-        messages.success(request, f"{property.name} has been removed from your favourites.")
-    else:
-        messages.warning(request, f"{property.name} was not in your favourites.")
+def add_review(request, accommodation_id):
+    """Adds a new review to an accommodation."""
+    accommodation = get_object_or_404(Accommodation, id=accommodation_id)
 
-    return redirect('user_profile')
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.accommodation = accommodation
+            review.user = request.user
+            review.save()
+
+            logger.info(f"Added review {review.title} by {request.user.username}")
+            return redirect('accommodation_detail', accommodation_id=accommodation_id)
+        else:
+            logger.warning(f"Invalid review form submission by {request.user.username}")
+
+    return render(request, 'dorm_guide/add_review.html', {'form': form, 'accommodation': accommodation})
+
+
+@login_required
+def like_review(request, review_id):
+    """Increments the like count of a review."""
+    review = get_object_or_404(Review, id=review_id)
+    review.likes += 1
+    review.save()
+
+    logger.info(f"Review {review.title} liked. Total likes: {review.likes}")
+    return JsonResponse({'likes': review.likes})
+
+
+def search(request):
+    """Search for accommodations or universities."""
+    query = request.GET.get('q', '')
+    results = []
+
+    if query:
+        results = Accommodation.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        ) | University.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+
+    logger.info(f"Search query: '{query}' returned {len(results)} results.")
+    return render(request, 'dorm_guide/search_results.html', {'results': results, 'query': query})
