@@ -6,9 +6,9 @@ from django.core.paginator import Paginator
 from django.db.models import Avg, Q
 from dorm_guide.models import University, Accommodation, Review
 from dorm_guide.forms import ReviewForm
+from .forms import UserProfileForm
 
 logger = logging.getLogger(__name__)
-
 
 def index(request):
     """Home page showing university listings."""
@@ -37,6 +37,7 @@ def accommodation_detail(request, accommodation_id):
     accommodation = get_object_or_404(Accommodation, id=accommodation_id)
     reviews = accommodation.review_set.all().order_by('-created_at')
 
+    
     paginator = Paginator(reviews, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -98,3 +99,19 @@ def search(request):
 
     logger.info(f"Search query: '{query}' returned {len(results)} results.")
     return render(request, 'dorm_guide/search_results.html', {'results': results, 'query': query})
+
+
+@login_required
+def edit_profile(request):
+    """Edit the user's profile."""
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile') 
+    else:
+        form = UserProfileForm(instance=user_profile)
+
+    return render(request, 'dorm_guide/edit_profile.html', {'form': form})
