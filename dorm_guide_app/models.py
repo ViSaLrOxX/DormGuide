@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from decimal import Decimal
 from django.contrib.auth import get_user_model
 from dorm_guide_app.models import Property  
+from django.apps import apps
 
 class University(models.Model):
     name = models.CharField(max_length=128)
@@ -112,7 +113,9 @@ class UserProfile(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=15)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-    favourite_properties = models.ManyToManyField(Property, blank=True)
+    favourite_properties = models.ManyToManyField(
+        apps.get_model('dorm_guide_app', 'Property'), blank=True
+    )
 
     def __str__(self):
         return f'{self.user.username} Profile'
