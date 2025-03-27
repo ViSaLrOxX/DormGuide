@@ -10,7 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-from pathlib import Path  
+import os
+from pathlib import Path
+
+# Set the GDAL library path correctly for macOS Homebrew installation
+GDAL_LIBRARY_PATH = '/opt/homebrew/opt/gdal/lib/libgdal.36.3.10.2.dylib'  # Updated path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = BASE_DIR / 'templates'
@@ -21,10 +25,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.gis',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -43,12 +47,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'dorm_guide.urls'  
+ROOT_URLCONF = 'dorm_guide.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATES_DIR],  
+        'DIRS': [TEMPLATES_DIR],  # Updated template directory path
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -61,17 +65,14 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'dorm_guide.wsgi.application'  
-
+WSGI_APPLICATION = 'dorm_guide.wsgi.application'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',  
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -88,7 +89,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -104,7 +104,6 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'  
-
 
 LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (51.505, -0.09),
