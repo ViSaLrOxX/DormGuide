@@ -1,95 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - DormGuide</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        header {
-            background-color: grey;
-            padding: 20px;
-            border-bottom: 1px grey;
-            display: flex;
-            align-items: center;
-        }
-        header img {
-            width: 50px;
-            vertical-align: middle;
-            margin-right: 10px;
-        }
-        header h1 {
-            font-size: 24px;
-            margin: 0;
-            color: black; 
-        }
-        .container {
-            padding: 20px;
-            flex: 1;
-            text-align: center;
-        }
-        .container h2 {
-            font-size: 24px;
-            color: red;
-            margin-bottom: 20px;
-        }
-        .container p {
-            font-size: 16px;
-            margin-bottom: 15px;
-        }
-        .search-bar {
-            margin: 20px auto;
-            text-align: center;
-        }
-        .search-bar input {
-            padding: 10px;
-            width: 300px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .contact-info {
-            margin: 20px auto;
-            text-align: center;
-            font-size: 18px;
-            line-height: 1.6;
-        }
-        .contact-info span {
-            font-weight: bold;
-        }
-        footer {
-            background-color: #f5f5f5;
-            padding: 10px;
-            border-top: 1px solid #ddd;
-            text-align: center;
-            font-size: 14px;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <img src="DormGuide/media/icon.jpg" alt="DormGuide Logo">
-        <h1> DormGuide | Contact Us</h1>
-    </header>
-    <div class="container">
-        <h2>Advice and answers from the DormGuide Team</h2>
-        <div class="search-bar">
-            <input type="text" placeholder="Search for help or topics...">
+{% extends 'dorm_guide_app/base.html' %}
+{% load leaflet_tags %}
+
+{% block title_block %}
+    Contact Us
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <h2 class="text-primary fw-bold">Get in Touch with DormGuide</h2>
+        <p class="lead">Have questions or want to learn more? Our team is ready to help!</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Contact Info Section -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm p-4 bg-body rounded">
+                <h4 class="mb-3">Contact Information</h4>
+                <p>Email: <a href="mailto:dormguidehelp@dormguideofficial.com">dormguidehelp@dormguideofficial.com</a></p>
+                <p>Phone: <a href="tel:+4407233321476">+44 07233 321476</a></p>
+                <p>For quick answers, check out our 
+                    <a href="{% url 'dormguide:faq' %}">FAQ section</a>.
+                </p>
+                <p>We'd also love to see you in person! Find us on the map.</p>
+            </div>
         </div>
-        <p>Please get in touch if you want to learn more about DormGuide through one of the listed options below.</p>
-        <div class="contact-info">
-            <p><span>Email:</span> <a href="mailto:dormguidehelp@dormguideofficial.com">dormguidehelp@dormguideofficial.com</a></p>
-            <p><span>Phone:</span> <a href="tel:+4407233321476">+44 07233 321476</a></p>
+
+        
+        <div class="col-lg-6">
+            <div id="map" class="shadow-sm rounded" style="height: 400px;"></div>
         </div>
     </div>
-    <footer>
-        &copy; 2025 DormGuide. All rights reserved.
-    </footer>
-</body>
-</html>
+</div>
+
+<script>
+    
+    const osm_map = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    const map = L.map('map', {
+        layers: [osm_map],
+        center: [55.871148, -4.288634], 
+        zoom: 13
+    });
+
+    L.marker([55.871148, -4.288634])
+        .addTo(map)
+        .bindPopup("<b>DormGuide HQ</b><br>Come visit us!")
+        .openPopup();
+</script>
+{% endblock %}
