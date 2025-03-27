@@ -3,8 +3,8 @@ from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from decimal import Decimal
-from .models import UserProfile
 from django.contrib.auth import get_user_model
+
 
 class University(models.Model):
     name = models.CharField(max_length=128)
@@ -28,13 +28,8 @@ class University(models.Model):
             raise ValidationError("Latitude must be between -90 and 90")
         if self.longitude > 180 or self.longitude < -180:
             raise ValidationError("Longitude must be between -180 and 180")
-    
-    def clean(self):
-        if self.latitude > 90 or self.latitude < -90:
-            raise ValidationError("Latitude must be between -90 and 90")
-        if self.longitude > 180 or self.longitude < -180:
-            raise ValidationError("Longitude must be between -180 and 180")
-  
+
+
 class Accommodation(models.Model):
     university = models.ForeignKey(University, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
@@ -63,17 +58,19 @@ class Accommodation(models.Model):
         if self.rent_min > self.rent_max:
             raise ValidationError("Rent Min cannot be greater than Rent Max.")
 
+
 class Review(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     likes = models.PositiveIntegerField(default=0)
     rating = models.DecimalField(max_digits=2, decimal_places=1)
     accommodation = models.ForeignKey(Accommodation, on_delete=models.CASCADE)
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)  
 
     def clean(self):
         if self.rating < 0 or self.rating > 5:
             raise ValidationError("Rating must be between 0 and 5.")
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
