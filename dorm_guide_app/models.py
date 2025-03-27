@@ -60,16 +60,16 @@ class Accommodation(models.Model):
 
 
 class Review(models.Model):
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    likes = models.PositiveIntegerField(default=0)
-    rating = models.DecimalField(max_digits=2, decimal_places=1)
-    accommodation = models.ForeignKey(Accommodation, on_delete=models.CASCADE)
-    user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)  
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE)  
+    rating = models.IntegerField()
+    comment = models.TextField()
+    picture = models.ImageField(upload_to='review_pictures/', null=True, blank=True) 
+    is_anonymous = models.BooleanField(default=False) 
+    
+    def __str__(self):
+        return f'Review by {self.user} for {self.property}'
 
-    def clean(self):
-        if self.rating < 0 or self.rating > 5:
-            raise ValidationError("Rating must be between 0 and 5.")
 
 
 class UserProfile(models.Model):
@@ -106,7 +106,7 @@ class Property(models.Model):
     photo = models.ImageField(upload_to='property_images/', blank=True, null=True)  
     price_per_month = models.DecimalField(max_digits=9, decimal_places=2)  
     address = models.CharField(max_length=255, blank=True) 
-    
+
     def __str__(self):
         return self.name
 
@@ -119,4 +119,3 @@ class Favourites(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.accommodation.name}"
-
