@@ -96,4 +96,11 @@ class Property(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Favourites(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    accommodation = models.ForeignKey(Accommodation, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.user.username} - {self.accommodation.name}"
