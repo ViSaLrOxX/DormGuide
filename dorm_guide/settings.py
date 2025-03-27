@@ -13,8 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 from pathlib import Path
 
-# Set the GDAL library path correctly for macOS Homebrew installation
-GDAL_LIBRARY_PATH = '/opt/homebrew/opt/gdal/lib/libgdal.36.3.10.2.dylib'  # Updated path
+GDAL_LIBRARY_PATH = '/opt/homebrew/opt/gdal/lib/libgdal.36.3.10.2.dylib'  
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = BASE_DIR / 'templates'
@@ -52,7 +51,7 @@ ROOT_URLCONF = 'dorm_guide.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATES_DIR],  # Updated template directory path
+        'DIRS': [TEMPLATES_DIR],  
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
