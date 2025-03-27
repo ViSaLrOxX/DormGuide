@@ -1,0 +1,22 @@
+{% extends 'dorm_guide_app/base.html' %}
+
+{% block title_block %}
+    Registration Closed
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm rounded p-5 text-center">
+                <h2 class="text-primary fw-bold mb-4">Registration Closed</h2>
+                <p class="lead">Unfortunately, registration is currently closed. Please try again later!</p>
+
+                <div class="mt-4">
+                    <a href="{% url 'dormguide:index' %}" class="btn btn-outline-secondary">Return to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
