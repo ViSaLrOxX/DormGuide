@@ -33,7 +33,6 @@
                  alt="{{ university.name }}">
         </div>
 
-        
         <div class="col-lg-8">
             <div class="d-flex align-items-center justify-content-center mb-3">
                 <h1 class="text-primary"><b>{{ university.name }}</b></h1>
@@ -56,8 +55,8 @@
             <div class="row align-items-center justify-content-center">
                 <h2 class="text-center text-primary"><b>Location</b></h2>
             </div>
-            <div id="map" class="rounded shadow-sm" style="height: 300px;">
-                {% leaflet_map "map" %}
+            <div id="map-container">
+                <div id="map" class="rounded shadow-sm" style="height: 300px;"></div>
             </div>
         </div>
 
@@ -90,18 +89,48 @@
     </div>
 </div>
 
-
 <script>
-    const osmMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("DOM fully loaded and parsed");
+
+        const mapContainer = document.getElementById("map");
+
+        if (mapContainer) {
+            console.log("Map container found");
+
+            const osmMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            });
+
+            const map = L.map('map', {
+                layers: [osmMap],
+                scrollWheelZoom: false
+            });
+
+            {% if university.latitude and university.longitude %}
+                console.log("Latitude:", {{ university.latitude }});
+                console.log("Longitude:", {{ university.longitude }});
+
+                let lat = {{ university.latitude }};
+                let lon = {{ university.longitude }};
+
+                if (!isNaN(lat) && !isNaN(lon)) {
+                    map.setView([lat, lon], 12);
+                    L.marker([lat, lon]).addTo(map).bindPopup("{{ university.name }}").openPopup();
+                } else {
+                    console.error("Invalid coordinates:", lat, lon);
+                    document.getElementById("map-container").innerHTML = "<p class='text-center text-muted'>Invalid map coordinates</p>";
+                }
+            {% else %}
+                console.error("Latitude and longitude are missing or invalid.");
+                document.getElementById("map-container").innerHTML = "<p class='text-center text-muted'>Map not available</p>";
+            {% endif %}
+        } else {
+            console.error("Map container not found.");
+        }
     });
-
-    const map = L.map('map', {
-        layers: [osmMap],
-        scrollWheelZoom: false
-    }).setView([{{ university.latitude }}, {{ university.longitude }}], 12);
-
-    const marker = L.marker([{{ university.latitude }}, {{ university.longitude }}]).addTo(map);
 </script>
+
+{% endblock %}
 
 {% endblock %}
