@@ -10,11 +10,11 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ('username', 'email', 'password',)
 
-
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('first_name', 'last_name', 'email', 'phone', 'profile_picture', 'favourite_properties')
+
 
 
 class LocationForm(forms.ModelForm):
