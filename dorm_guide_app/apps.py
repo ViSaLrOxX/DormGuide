@@ -1,5 +1,4 @@
 from django.apps import AppConfig
 
-
-class DormConfig(AppConfig):
-    name = 'dorm'
+class DormGuideAppConfig(AppConfig):
+    name = 'dorm_guide_app'
