@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+{% load leaflet_tags %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% leaflet_js %}
+    {% leaflet_css %}
+    <link rel="icon" href="{% static 'images/dd_favicon.png' %}" type="image/png">
+    <title>
+        {% block title_block %}{% if block.content %}{{ block.content }}{% else %} Dorm Guide {% endif %}{% endblock title_block %}
+    </title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-primary navbar-light fixed-top">
+        <div class="container-fluid">
+            <ul class="navbar-nav flex-grow-1 justify-content-center nav-fill align-items-center">
+                <a class="navbar-brand text-light" href="{% url 'dorm-guide:index' %}">
+                    <img src="{% static 'images/dd_logo.png' %}" alt="Dorm Guide Logo" height="65px;" width="75px;">
+                </a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-light" href="#", role="button" data-bs-toggle="dropdown">Universities</a>
+                    <ul class="dropdown-menu">
+                        {% for u in universities %}
+                            <li><a class="dropdown-item" href="{% url 'dorm-guide:university' u.slug %}">{{ u.name }}</a></li>
+                        {% endfor %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'dorm-guide:universities' %}">All Universities</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'dorm-guide:about' %}">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'dorm-guide:faq' %}">FAQs</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'dorm-guide:contact_us' %}">Contact Us</a>
+                </li>
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="navbar-brand text-light" href="{% url 'dorm-guide:my_account' user.id %}">
+                        My Account
+                        <img src="{% if user_profile.picture %}{{ user_profile.picture }}{% else %}{% static 'images/default_pp.png' %}{% endif %}" class="rounded" height="45px;" width="50px;" style="margin-left: 10px;">
+                    </a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'dorm-guide:registration_register' %}">Register/Log In</a>
+                </li>
+            {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid content-container align-items-center">
+    {% block content %}
+    {% endblock %}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
+</body>
+</html>
+
+
+{% load static %}
+{% load leaflet_tags %} 
+{% load csrf_token %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title_block %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {% leaflet_js %}
+    {% leaflet_css %}
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'dorm-detective:index' %}">Dorm Detective</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dorm-detective:index' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dorm-detective:about' %}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dorm-detective:universities' %}">Universities</a>
+                </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dorm-detective:auth_logout' %}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dorm-detective:auth_login' %}">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- CSRF Token Form (hidden) -->
+<form id="csrf" style="display: none;">
+    {% csrf_token %}
+</form>
+
+<!-- Main Content -->
+<div class="content-container container mt-5">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <p>&copy; 2025 Dorm Detective. All Rights Reserved.</p>
+</footer>
+
+<!-- Scripts -->
+<script src="{% static 'js/addLike.js' %}"></script>
+
+</body>
+</html>
