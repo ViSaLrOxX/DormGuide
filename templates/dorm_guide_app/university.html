@@ -1,0 +1,107 @@
+{% extends 'dorm_guide_app/base.html' %}
+{% load static %}
+{% load leaflet_tags %}
+
+{% if university %}
+    {% block title_block %}
+        {{ university.name }}
+    {% endblock %}
+{% endif %}
+
+{% block content %}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'dormguide:index' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'dormguide:universities' %}">Universities</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ university.name }}
+        </li>
+    </ol>
+</nav>
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        
+        <div class="col-lg-4">
+            <img class="w-100 h-100 rounded shadow-sm" 
+                 src="{% if university.picture %}{{ MEDIA_URL }}{{ university.picture }}{% else %}{{ STATIC_URL }}images/uni_default.jpg{% endif %}" 
+                 alt="{{ university.name }}">
+        </div>
+
+        
+        <div class="col-lg-8">
+            <div class="d-flex align-items-center justify-content-center mb-3">
+                <h1 class="text-primary"><b>{{ university.name }}</b></h1>
+            </div>
+            <div class="about-content d-flex align-items-center justify-content-center shadow p-4 bg-body rounded">
+                <p class="text-center">
+                    {% if university.description %}
+                        {{ university.description }}
+                    {% else %}
+                        No description yet.
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        
+        <div class="col-lg-4">
+            <div class="row align-items-center justify-content-center">
+                <h2 class="text-center text-primary"><b>Location</b></h2>
+            </div>
+            <div id="map" class="rounded shadow-sm" style="height: 300px;">
+                {% leaflet_map "map" %}
+            </div>
+        </div>
+
+        
+        <div class="col-lg-8">
+            <div class="row">
+                <h2 class="text-center text-primary"><b>Accommodations</b></h2>
+            </div>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for a in accommodations %}
+                <div class="col">
+                    <a href="{% url 'dormguide:accommodation' university.slug a.slug %}" 
+                       class="text-decoration-none text-dark">
+                        <div class="card h-100 shadow-sm">
+                            <img src="{% if a.picture %}{{ MEDIA_URL }}{{ a.picture }}{% else %}{{ STATIC_URL }}images/accom_default.jpg{% endif %}" 
+                                 class="card-img-top" 
+                                 alt="{{ a.name }}">
+                            <div class="card-body">
+                                <h5 class="card-title"><b>{{ a.name }}</b></h5>
+                                <p class="card-text">{{ a.description }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% empty %}
+                <p class="text-center text-muted">No accommodations available at this university.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const osmMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    });
+
+    const map = L.map('map', {
+        layers: [osmMap],
+        scrollWheelZoom: false
+    }).setView([{{ university.latitude }}, {{ university.longitude }}], 12);
+
+    const marker = L.marker([{{ university.latitude }}, {{ university.longitude }}]).addTo(map);
+</script>
+
+{% endblock %}
