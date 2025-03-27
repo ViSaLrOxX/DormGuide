@@ -102,9 +102,14 @@ class Property(models.Model):
     description = models.TextField()
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=9, decimal_places=2)
+    is_available = models.BooleanField(default=True)  
+    photo = models.ImageField(upload_to='property_images/', blank=True, null=True)  
+    price_per_month = models.DecimalField(max_digits=9, decimal_places=2)  
+    address = models.CharField(max_length=255, blank=True) 
     
     def __str__(self):
         return self.name
+
 
 
 class Favourites(models.Model):
