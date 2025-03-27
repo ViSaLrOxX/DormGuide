@@ -3,6 +3,8 @@ from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from decimal import Decimal
+from .models import UserProfile
+
 
 class University(models.Model):
     name = models.CharField(max_length=128)
