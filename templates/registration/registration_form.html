@@ -5,30 +5,23 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-lg-6">
-            <div class="card shadow-sm rounded p-5">
-                <h2 class="text-primary fw-bold mb-4 text-center">Register</h2>
+    <div class="col-lg-1 justify-content-center mx-auto w-25">
+        <div class="row justify-content-center mb-3">
+            <h2 class="text-primary mb-4 fw-bold text-center">Register</h2>
 
-                <form method="post" action=".">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        {{ form.as_p }}
-                    </div>
+            <form method="post" action=".">
+                {% csrf_token %}
 
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary">Register</button>
-                        <input type="hidden" name="next" value="{{ next }}" />
-                    </div>
-                </form>
+                {{ form.as_p }}
 
-                <div class="text-center mt-4">
-                    <span>Already have an account?</span>
-                    <a href="{% url 'dormguide:auth_login' %}" class="btn btn-outline-success ms-2">Login</a>
-                </div>
-            </div>
+                <input type="submit" value="Register"/>
+                <input type="hidden" name="next" value="{{ next }}"/>
+            </form>
+        </div>
+        <div class="row justify-content-center">
+            <span>Already got an account? <a href="{% url 'dorm-guide:auth_login' %}">
+            <button type="button" class="btn btn-success">Login</button></a></span>
         </div>
     </div>
-</div>
-{% endblock %}
+
+{% endblock content %}
