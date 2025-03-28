@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from .models import UserProfile, Review, University
 from django import forms
-from registration.forms import RegistrationForm
+from django_registration.forms import RegistrationForm
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -71,3 +71,4 @@ class CustomRegistrationForm(RegistrationForm):
             default_profile_pic_url = '/static/images/default_pp.png'
             UserProfile.objects.create(user=user, current_student=self.cleaned_data['current_student'], picture=default_profile_pic_url)
         return user
+
