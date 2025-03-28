@@ -11,7 +11,7 @@ print("DATABASE_PASSWORD:", os.getenv('DATABASE_PASSWORD'))
 print("DATABASE_HOST:", os.getenv('DATABASE_HOST'))
 print("DATABASE_PORT:", os.getenv('DATABASE_PORT'))
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = BASE_DIR / 'templates'
@@ -109,6 +109,7 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [STATIC_DIR]
 
 LOGIN_REDIRECT_URL = '/dorm-guide/'  
