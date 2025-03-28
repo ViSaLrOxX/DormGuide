@@ -1,12 +1,19 @@
 import os
+from pathlib import Path
+import ctypes
+import django.contrib.gis.gdal
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
-MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+BASE_DIR = Path(__file__).resolve().parent.parent
+TEMPLATE_DIR = BASE_DIR / 'templates'
+STATIC_DIR = BASE_DIR / 'static'
+MEDIA_DIR = BASE_DIR / 'media'
 
-GDAL_LIBRARY_PATH = '/opt/homebrew/Cellar/gdal/3.10.2_3/lib/libgdal.dylib'
-GEOS_LIBRARY_PATH = '/opt/homebrew/Cellar/geos/3.13.1/lib/libgeos_c.dylib'
+try:
+    GDAL_LIBRARY_PATH = ctypes.util.find_library('gdal') or django.contrib.gis.gdal.libgdal_path()
+    GEOS_LIBRARY_PATH = ctypes.util.find_library('geos_c') or django.contrib.gis.gdal.libgdal_path()
+except Exception:
+    GDAL_LIBRARY_PATH = None
+    GEOS_LIBRARY_PATH = None
 
 SECRET_KEY = '7sww&gvkvd)ykx&kw3+u326n^s2jt#uz0f6bj1ttel$&p$ps*('
 
@@ -21,7 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
-    'registration',             
+    'registration',
     'dorm_guide_app',
     'django_bootstrap5',
     'leaflet'
@@ -42,7 +49,7 @@ ROOT_URLCONF = 'dorm_guide.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR, ],
+        'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
