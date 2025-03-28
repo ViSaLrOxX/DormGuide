@@ -1,5 +1,5 @@
 {% extends 'dorm_guide_app/base.html' %}
-{% load static %}
+{% load staticfiles %}
 {% load leaflet_tags %}
 
 {% if university %}
@@ -9,128 +9,94 @@
 {% endif %}
 
 {% block content %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'dorm-guide:index' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'dorm-guide:universities' %}">Universities</a></li>
+            <li class="breadcrumb-item active">{% if university.name %}{{ university.name }}{% endif %}</li>
+        </ol>
+    </nav>
 
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a href="{% url 'dormguide:index' %}">Home</a>
-        </li>
-        <li class="breadcrumb-item">
-            <a href="{% url 'dormguide:universities' %}">Universities</a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">
-            {{ university.name }}
-        </li>
-    </ol>
-</nav>
+    <div class="container-fluid">
+        <div class="row mb-3">
+            <div class="col-lg-4">
+                <img class="w-100 h-100" src="
 
-<div class="container-fluid">
-    <div class="row mb-3">
-        
-        <div class="col-lg-4">
-            <img class="w-100 h-100 rounded shadow-sm" 
-                 src="{% if university.picture %}{{ MEDIA_URL }}{{ university.picture }}{% else %}{{ STATIC_URL }}images/uni_default.jpg{% endif %}" 
-                 alt="{{ university.name }}">
-        </div>
 
-        <div class="col-lg-8">
-            <div class="d-flex align-items-center justify-content-center mb-3">
-                <h1 class="text-primary"><b>{{ university.name }}</b></h1>
-            </div>
-            <div class="about-content d-flex align-items-center justify-content-center shadow p-4 bg-body rounded">
-                <p class="text-center">
-                    {% if university.description %}
-                        {{ university.description }}
-                    {% else %}
-                        No description yet.
-                    {% endif %}
-                </p>
-            </div>
-        </div>
-    </div>
 
-    <div class="row">
-        
-        <div class="col-lg-4">
-            <div class="row align-items-center justify-content-center">
-                <h2 class="text-center text-primary"><b>Location</b></h2>
-            </div>
-            <div id="map-container">
-                <div id="map" class="rounded shadow-sm" style="height: 300px;"></div>
-            </div>
-        </div>
 
-        
-        <div class="col-lg-8">
-            <div class="row">
-                <h2 class="text-center text-primary"><b>Accommodations</b></h2>
+
+
+
+                        {% if university.picture %}{{ MEDIA_URL }}{{ university.picture }}{% else %}{{ STATIC_URL }}images/uni_default.jpg{% endif %}"
+                     alt="university picture">
             </div>
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-                {% for a in accommodations %}
-                <div class="col">
-                    <a href="{% url 'dormguide:accommodation' university.slug a.slug %}" 
-                       class="text-decoration-none text-dark">
-                        <div class="card h-100 shadow-sm">
-                            <img src="{% if a.picture %}{{ MEDIA_URL }}{{ a.picture }}{% else %}{{ STATIC_URL }}images/accom_default.jpg{% endif %}" 
-                                 class="card-img-top" 
-                                 alt="{{ a.name }}">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>{{ a.name }}</b></h5>
-                                <p class="card-text">{{ a.description }}</p>
-                            </div>
-                        </div>
-                    </a>
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center justify-content-center mb-3">
+                    <h1 class="text-primary"><b>{% if university.name %}{{ university.name }}{% endif %}</b></h1>
                 </div>
-                {% empty %}
-                <p class="text-center text-muted">No accommodations available at this university.</p>
-                {% endfor %}
+                <div class="about-content d-flex align-items-center justify-content-center shadow p-3 bg-body rounded">
+                    <p class="text-center">
+                        {% if university.description %}
+                            {{ university.description }}
+                        {% else %}
+                            No description yet.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="row align-items-center justify-content-center ">
+                    <h2 class="text-center text-primary"><b>Location</b></h2>
+                </div>
+                <div class="row">
+                    <div>
+                        {% leaflet_map "map" %}
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-8">
+                <div class="row">
+                    <h2 class="text-center text-primary"><b>Accommodations</b></h2>
+                </div>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    {% for a in accommodations %}
+                        <div class="col">
+                            <a href="{% url 'dorm-guide:accommodation' university.slug a.slug %}"
+                               style="text-decoration: none; color: black">
+                                <div class="card h-100">
+                                    <img src="
+
+                                            {% if a.picture %}{{ MEDIA_URL }}{{ a.picture }}{% else %}{{ STATIC_URL }}images/accom_default.jpg{% endif %}"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><b>{{ a.name }}</b></h5>
+                                        <p class="card-text">{{ a.description }}</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        console.log("DOM fully loaded and parsed");
+    <script>
+        const osm_map = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '<a href="https://www.openstreetmap.org/copright">OpenStreetMap</a>'
+        });
 
-        const mapContainer = document.getElementById("map");
+        const map = L.map('map', {
+            layers: [osm_map]
+        }).setView([{{ university.latitude }}, {{ university.longitude }}], 12);
 
-        if (mapContainer) {
-            console.log("Map container found");
-
-            const osmMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            });
-
-            const map = L.map('map', {
-                layers: [osmMap],
-                scrollWheelZoom: false
-            });
-
-            {% if university.latitude and university.longitude %}
-                console.log("Latitude:", {{ university.latitude }});
-                console.log("Longitude:", {{ university.longitude }});
-
-                let lat = {{ university.latitude }};
-                let lon = {{ university.longitude }};
-
-                if (!isNaN(lat) && !isNaN(lon)) {
-                    map.setView([lat, lon], 12);
-                    L.marker([lat, lon]).addTo(map).bindPopup("{{ university.name }}").openPopup();
-                } else {
-                    console.error("Invalid coordinates:", lat, lon);
-                    document.getElementById("map-container").innerHTML = "<p class='text-center text-muted'>Invalid map coordinates</p>";
-                }
-            {% else %}
-                console.error("Latitude and longitude are missing or invalid.");
-                document.getElementById("map-container").innerHTML = "<p class='text-center text-muted'>Map not available</p>";
-            {% endif %}
-        } else {
-            console.error("Map container not found.");
-        }
-    });
-</script>
-
-{% endblock %}
+        const marker = new L.Marker([{{ university.latitude }}, {{ university.longitude }}]);
+        marker.addTo(map)
+    </script>
 
 {% endblock %}
