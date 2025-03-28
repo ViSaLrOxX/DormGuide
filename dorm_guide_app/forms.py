@@ -71,4 +71,3 @@ class CustomRegistrationForm(RegistrationForm):
             default_profile_pic_url = '/static/images/default_pp.png'
             UserProfile.objects.create(user=user, current_student=self.cleaned_data['current_student'], picture=default_profile_pic_url)
         return user
-
