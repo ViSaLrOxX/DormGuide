@@ -5,14 +5,6 @@ from pathlib import Path
 import ctypes
 import django.contrib.gis.gdal
 
-print("DATABASE_NAME:", os.getenv('DATABASE_NAME'))
-print("DATABASE_USER:", os.getenv('DATABASE_USER'))
-print("DATABASE_PASSWORD:", os.getenv('DATABASE_PASSWORD'))
-print("DATABASE_HOST:", os.getenv('DATABASE_HOST'))
-print("DATABASE_PORT:", os.getenv('DATABASE_PORT'))
-
-
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = BASE_DIR / 'templates'
 STATIC_DIR = BASE_DIR / 'static'
@@ -26,17 +18,10 @@ except Exception:
     GEOS_LIBRARY_PATH = None
 
 SECRET_KEY = '7sww&gvkvd)ykx&kw3+u326n^s2jt#uz0f6bj1ttel$&p$ps*('
-
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 ENV = os.getenv('DJANGO_ENV', 'production')
 
-ALLOWED_HOSTS = [
-    'localhost',    
-    '127.0.0.1',   
-    'https://visroxx.pythonanywhere.com/',  
-]
-
-
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -110,10 +95,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [STATIC_DIR]
-
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-LOGIN_REDIRECT_URL = '/dorm-guide/'  
+LOGIN_REDIRECT_URL = '/dorm-guide/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/accounts/login/'
 ACCOUNT_ACTIVATION_DAYS = 7
@@ -122,13 +106,3 @@ REGISTRATION_AUTO_LOGIN = True
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 
-print("DEBUG:", DEBUG)
-print("ENV:", ENV)
-print("ALLOWED_HOSTS:", ALLOWED_HOSTS)
-
-ALLOWED_HOSTS = [
-    'localhost', 
-    '127.0.0.1', 
-    'dorm-guide.pythonanywhere.com',  
-    os.getenv('PYTHONANYWHERE_DOMAIN', 'your-pythonanywhere-username.pythonanywhere.com')  
-]
