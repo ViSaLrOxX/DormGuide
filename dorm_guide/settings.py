@@ -8,6 +8,7 @@ TEMPLATE_DIR = BASE_DIR / 'templates'
 STATIC_DIR = BASE_DIR / 'static'
 MEDIA_DIR = BASE_DIR / 'media'
 
+# GDAL and GEOS paths
 try:
     GDAL_LIBRARY_PATH = ctypes.util.find_library('gdal') or django.contrib.gis.gdal.libgdal_path()
     GEOS_LIBRARY_PATH = ctypes.util.find_library('geos_c') or django.contrib.gis.gdal.libgdal_path()
@@ -15,14 +16,19 @@ except Exception:
     GDAL_LIBRARY_PATH = None
     GEOS_LIBRARY_PATH = None
 
+
 SECRET_KEY = '7sww&gvkvd)ykx&kw3+u326n^s2jt#uz0f6bj1ttel$&p$ps*('
 
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
+ENV = os.getenv('DJANGO_ENV', 'production')
+
+if ENV == 'local':
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+else:
+    ALLOWED_HOSTS = ['dorm-guide.pythonanywhere.com']
 
 if DEBUG:
-    ALLOWED_HOSTS = []
-else:
-    ALLOWED_HOSTS = ['your-pythonanywhere-username.pythonanywhere.com', 'localhost', '127.0.0.1']
+    ALLOWED_HOSTS += ['localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
