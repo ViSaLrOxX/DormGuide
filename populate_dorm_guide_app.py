@@ -1,4 +1,5 @@
 import random
+
 import django
 import os
 import subprocess
@@ -8,7 +9,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dorm_guide.settings')
 
 django.setup()
 
-from dorm_guide.models import University, Accommodation, UserProfile, User, Review
+from dorm_guide_app.models import University, Accommodation, UserProfile, User, Review
 
 
 def populate():
@@ -199,50 +200,108 @@ def populate():
                         Russell Group[7] and the Guild of European Research-Intensive Universities.""",
             'synopsis': """The University of Glasgow is a public research university in Glasgow, Scotland. Founded by papal bull in 1451
                         [O.S. 1450],[5] it is the fourth-oldest university in the English-speaking world and one of
-                        Scotland's four ancient universities. Along with the universities of Edinburgh, Aberdeen, and St
-                        Andrews, the university was part of the Scottish Enlightenment during the 18th century.""",
-            'accommodations': uofg_accommodations
+                        Scotland's four ancient universities.""",
+            'accommodations': uofg_accommodations,
+            'image_path': POPULATION_RESOURCES + 'glasgow.jpg',
+            'email_domain':'student.gla.ac.uk'
         },
         'University of Strathclyde': {
-            'latitude': 55.8629, 'longitude': -4.2484, 'website': 'https://www.strath.ac.uk/',
-            'description': """The University of Strathclyde (Scots: University o Strathclyde, Scottish Gaelic: Oilthigh Srath
-                        Chluaidh) is a public research university in Glasgow, Scotland. Founded in 1796 as the Andersonian
-                        Institute, it was granted university status in 1964. The university is now one of the largest in the
-                        United Kingdom and has a growing international reputation for the quality of its teaching and
-                        research.""",
-            'synopsis': """The University of Strathclyde is a public research university in Glasgow, Scotland, founded in 1796 as the
-                        Andersonian Institute.""",
-            'accommodations': uofst_accommodations
+            'latitude': 55.862194, 'longitude': -4.242386, 'website': 'https://www.strath.ac.uk/',
+            'description': """The University of Strathclyde is a public research university located in
+                            Glasgow, Scotland. Founded in 1796 as the Andersonian Institute, it is Glasgow's 
+                            second-oldest university.""",
+            'synopsis': """The University of Strathclyde is a public research university located in
+                            Glasgow, Scotland. Founded in 1796 as the Andersonian Institute, it is Glasgow's 
+                            second-oldest university.""",
+            'accommodations': uofst_accommodations,
+            'image_path': POPULATION_RESOURCES + "strathclyde.jpg",
+            'email_domain':'uni.strath.ac.uk'
         },
-        'University of Caledonia': {
-            'latitude': 55.8591, 'longitude': -4.2439, 'website': 'https://www.caledonian.ac.uk/',
-            'description': """Glasgow Caledonian University (GCU) is a public university in Glasgow, Scotland. It was created
-                        in 1993 by the merger of Glasgow Polytechnic and the Queen’s College, Glasgow.""",
-            'synopsis': """Glasgow Caledonian University (GCU) is a public university in Glasgow, Scotland, created in 1993 by the
-                        merger of Glasgow Polytechnic and the Queen’s College, Glasgow.""",
-            'accommodations': uofcal_accommodations
+        'Glasgow Caledonian University': {
+            'latitude': 55.866883, 'longitude': -4.250399, 'website': 'https://www.gcu.ac.uk/',
+            'description': """Glasgow Caledonian University, informally GCU, Caledonian or Caley, is a
+                            public university in Glasgow, Scotland. It was formed in 1993 by the merger of The Queen's College,
+                            Glasgow and Glasgow Polytechnic.""",
+            'synopsis': """Glasgow Caledonian University, informally GCU, Caledonian or Caley, is a
+                            public university in Glasgow, Scotland. It was formed in 1993 by the merger of The Queen's College,
+                            Glasgow and Glasgow Polytechnic.""",
+            'accommodations': uofcal_accommodations,
+            'image_path': POPULATION_RESOURCES + "caledonian.jpg",
+            'email_domain':'caledonian.ac.uk'
         },
     }
 
-    
-    for uni_name, uni_data in universities.items():
-        university = University.objects.create(name=uni_name, latitude=uni_data['latitude'], longitude=uni_data['longitude'],
-                                               website=uni_data['website'], description=uni_data['description'])
-        for accommodation_data in uni_data['accommodations']:
-            accommodation = Accommodation.objects.create(name=accommodation_data['name'],
-                                                        description=accommodation_data['description'],
-                                                        latitude=accommodation_data['latitude'],
-                                                        longitude=accommodation_data['longitude'],
-                                                        rent_max=accommodation_data['rent_max'],
-                                                        rent_min=accommodation_data['rent_min'],
-                                                        university=university,
-                                                        image_path=accommodation_data['image_path'])
-            
-            for rev in accommodation_data['revs']:
-                Review.objects.create(title=rev['title'], description=rev['description'], likes=rev['likes'],
-                                      rating=rev['rating'], accommodation=accommodation, image_path=rev.get('image_path'))
-        print(f"Populated accommodations and reviews for {uni_name}")
+    user_profs = []
+
+    for user in users:
+        user_profs.append(add_user(user['username'], user['password'], user['student'], user['image_path']))
+
+    for university, uni_data in universities.items():
+        uni = add_university(university, uni_data['latitude'], uni_data['longitude'], uni_data['description'],
+                             uni_data['website'], uni_data['synopsis'], uni_data['image_path'])
+        for a in uni_data['accommodations']:
+            accom = add_accommodation(uni, a['name'], a['description'], a['latitude'], a['longitude'], a['rent_max'],
+                                      a['rent_min'], a['image_path'])
+            for rev in a['revs']:
+                add_review(accom, rev['title'], rev['description'], rev['likes'], rev['rating'],
+                           random.choice(user_profs), rev['image_path'])
+
+    for uni in University.objects.all():
+        print(f'- {uni}')
+
+    for acc in Accommodation.objects.all():
+        print(f'- {acc}')
 
 
-if __name__ == "__main__":
+def add_university(name, latitude, longitude, description, website, synopsis, img):
+    uni = University.objects.get_or_create(name=name)[0]
+    uni.latitude = latitude
+    uni.longitude = longitude
+    uni.description = description
+    uni.website = website
+    uni.synopsis = synopsis
+    uni.picture = img
+    uni.save()
+
+    return uni
+
+
+def add_accommodation(uni, name, description, latitude, longitude, rent_max, rent_min, img):
+    accom = Accommodation.objects.get_or_create(university=uni, name=name)[0]
+    accom.description = description
+    accom.latitude = latitude
+    accom.longitude = longitude
+    accom.rent_max = rent_max
+    accom.rent_min = rent_min
+    accom.picture = img
+    accom.save()
+
+    return accom
+
+
+def add_user(username, password, is_student, img):
+    user = User.objects.get_or_create(username=username, password=password)[0]
+    user.save()
+    user_profile = UserProfile.objects.get_or_create(user=user, current_student=is_student)[0]
+    user_profile.picture = img
+    user_profile.save()
+
+    return user_profile
+
+
+def add_review(accommodation, title, description, likes, rating, user, img):
+    rev = Review.objects.get_or_create(accommodation=accommodation, user=user)[0]
+    rev.title = title
+    rev.description = description
+    rev.likes = likes
+    rev.rating = rating
+    rev.datetime = timezone.now()
+    rev.picture = img
+    rev.save()
+
+    return rev
+
+
+if __name__ == '__main__':
+    print('Running the population script...')
     populate()
