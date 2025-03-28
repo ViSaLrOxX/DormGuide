@@ -102,18 +102,12 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [STATIC_DIR, ]
 
 
-REGISTRATION_OPEN = True
-
-
-REGISTRATION_AUTO_LOGIN = True
-
 
 LOGIN_REDIRECT_URL = '/dorm-guide/'
 
+LOGIN_URL = 'account_login'
 
-LOGIN_URL = 'auth_login'
 
-REGISTRATION_FORM = 'dorm_guide_app.forms.CustomRegistrationForm'
 
 MEDIAFILES_DIRS = [
     MEDIA_DIR,
