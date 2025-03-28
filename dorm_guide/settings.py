@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dorm_guide_app',
     'registration',
-    'bootstrap5',
+    'django_bootstrap5',
     'leaflet'
 ]
 
