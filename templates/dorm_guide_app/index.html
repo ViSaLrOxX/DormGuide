@@ -1,58 +1,53 @@
 {% extends 'dorm_guide_app/base.html' %}
 
 {% block content %}
-<div class="d-flex align-items-center justify-content-center flex-column gap-4 my-5">
-    
-    <form class="search-box d-flex w-50">
-        <input class="form-control me-2" type="search" placeholder="Search for a University..." aria-label="Search">
-        <a href="{% url 'dormguide:universities' %}">
-            <button type="button" class="btn btn-success">
-                <i class="fas fa-search"></i>
-            </button>
-        </a>
-    </form>
-</div>
-
-<div class="row justify-content-center text-center mb-5">
-    <div class="col-lg-4">
-        <h4><b>Universities Supported:</b> {% if universities_supported %}{{ universities_supported }}{% endif %}</h4>
-        <h4><b>Students Helped:</b> {% if total_likes %}{{ total_likes }}{% endif %}</h4>
-    </div>
-    <div class="col-lg-4">
-        <h4><b>Number of Students:</b> {% if students_no %}{{ students_no }}{% endif %}</h4>
-        <h4><b>Total Reviews:</b> {% if total_reviews %}{{ total_reviews }}{% endif %}</h4>
-    </div>
-</div>
-
-<div class="row justify-content-center">
-    <div class="text-center mb-4">
-        <h3 class="text-primary">
-            <i class="fas fa-trophy text-success"></i> Top-Rated Accommodations
-        </h3>
+    <div class="d-flex align-items-center justify-content-center flex-column gap-4 mb-5">
+        <form class="search-box d-flex">
+            <input class="search-text form-control me-1" type="search" placeholder="Find your University...">
+            <a href="{% url 'dorm-guide:universities' %}">
+                <button type="button" class="btn btn-success">
+                    <i class="fas fa-search"></i>
+                </button>
+            </a>
+        </form>
     </div>
 
-    <div class="row row-cols-1 row-cols-md-4 g-4">
-        {% if accommodations %}
-            {% for a in accommodations %}
-                <div class="col">
-                    <a href="{% url 'dormguide:accommodation' a.university.slug a.slug %}"
-                       style="text-decoration: none; color: black;">
-                        <div class="card h-100 shadow-sm rounded">
-                            <img src="{% if a.picture %}{{ MEDIA_URL }}{{ a.picture }}{% else %}{{ STATIC_URL }}images/accom_default.jpg{% endif %}"
-                                 class="card-img-top" alt="{{ a.name }}">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">{{ a.name }}</h5>
-                                <p class="card-text">{{ a.description }}</p>
-                            </div>
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-4 mr-2 text-center">
+            <h4><b>Universities Supported: </b>{% if universities_supported %}{{ universities_supported }}{% endif %}</h4>
+            <br>
+            <h4><b>Students Helped: </b>{% if total_likes %}{{ total_likes }}{% endif %}</h4>
+        </div>
+        <div class="col-lg-4 ml-2 text-center">
+            <h4><b>Number of Students: </b>{% if students_no %}{{ students_no }}{% endif %}</h4>
+            <br>
+            <h4><b>Total Reviews: </b>{% if total_reviews %}{{ total_reviews }}{% endif %}</h4>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="row text-center">
+            <h3 class="text-primary"><i class="fas fa-trophy text-success"></i> Highest Rated Accommodations</h3>
+        </div>
+        <div class="row">
+            {% if accommodations %}
+                    <div class="row row-cols-1 row-cols-md-4 g-4">
+                    {% for a in accommodations %}
+                        <div class="col">
+                            <a href="{% url 'dorm-guide:accommodation' a.university.slug a.slug %}"
+                               style="text-decoration: none; color: black">
+                                <div class="card h-100">
+                                    <img src="{% if a.picture %}{{ MEDIA_URL }}{{ a.picture }}{% else %}{{ STATIC_URL }}images/accom_default.jpg{% endif %}"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><b>{{ a.name }}</b></h5>
+                                        <p class="card-text">{{ a.description }}</p>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                    </a>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-        {% else %}
-            <div class="col-12 text-center">
-                <p class="text-muted">No accommodations available at the moment.</p>
-            </div>
-        {% endif %}
+            {% endif %}
+        </div>
     </div>
-</div>
 {% endblock %}
