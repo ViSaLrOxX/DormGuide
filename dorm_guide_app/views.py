@@ -1,117 +1,198 @@
-import logging
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.core.paginator import Paginator
-from django.db.models import Avg, Q
-from dorm_guide_app.models import University, Accommodation, Review
+from dorm_guidee_app.models import *
+from django.contrib.auth import logout
 from dorm_guide_app.forms import ReviewForm
-from .forms import UserProfileForm
 
-logger = logging.getLogger(__name__)
 
 def index(request):
-    """Home page showing university listings."""
-    universities = University.objects.all().order_by('name')
+    universities = University.objects.all()
+    universities_supported = universities.count()
+    students_no = User.objects.all().count()
 
-    paginator = Paginator(universities, 5)  
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    try:
+        accommodations = Accommodation.objects.all()
 
-    logger.info(f"Loaded index page with {universities.count()} universities.")
-    return render(request, 'dorm_guide/index.html', {'page_obj': page_obj})
+        accommodations_ratings = {}
+
+        total_reviews = 0
+
+        total_likes = 0
+
+        for accommodation in accommodations:
+            rating_score = 0
+            reviews = Review.objects.filter(accommodation=accommodation)
+
+            if reviews.count() > 0:
+                total_reviews += reviews.count()
+
+                for review in reviews:
+                    rating_score += review.rating
+                    total_likes += review.likes
+
+                rating_score / reviews.count()
+
+                accommodations_ratings[accommodation] = rating_score
+
+        highest_rated_accommodations = sorted(accommodations_ratings, key=accommodations_ratings.get)[:4]
+
+    except Accommodation.DoesNotExist:
+        highest_rated_accommodations = None
+        total_reviews = None
+
+    context = {"universities": universities, "universities_supported": universities_supported,
+               "accommodations": highest_rated_accommodations, "total_reviews": total_reviews,
+               "students_no": students_no, "total_likes": total_likes}
+    template_name = 'dorm_guide_app/index.html'
+    return render(request, template_name, context)
 
 
-def university_detail(request, university_id):
-    """Displays details for a single university."""
-    university = get_object_or_404(University, id=university_id)
-    accommodations = university.accommodation_set.all()
+def about(request):
+    universities = University.objects.all()
+    context = {"universities": universities}
+    template_name = 'dorm_guide_app/about.html'
+    return render(request, template_name, context)
 
-    logger.info(f"Viewing details for {university.name} with {accommodations.count()} accommodations.")
-    return render(request, 'dorm_guide/university_detail.html', {'university': university, 'accommodations': accommodations})
+
+def contact_us(request):
+    universities = University.objects.all()
+    context = {"universities": universities}
+    template_name = 'dorm_guide_app/contact_us.html'
+    return render(request, template_name, context)
+
+
+def faq(request):
+    universities = University.objects.all()
+    context = {"universities": universities}
+    template_name = 'dorm_guide_app/faq.html'
+    return render(request, template_name, context)
 
 
 @login_required
-def accommodation_detail(request, accommodation_id):
-    """Shows detailed view of an accommodation."""
-    accommodation = get_object_or_404(Accommodation, id=accommodation_id)
-    reviews = accommodation.review_set.all().order_by('-created_at')
-
-    
-    paginator = Paginator(reviews, 5)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    form = ReviewForm()
-
-    logger.info(f"Viewing accommodation {accommodation.name} with {reviews.count()} reviews.")
-    return render(
-        request,
-        'dorm_guide/accommodation_detail.html',
-        {'accommodation': accommodation, 'page_obj': page_obj, 'form': form}
-    )
+def my_account(request, user_id):
+    user = User.objects.get(id=user_id)
+    user_profile = UserProfile.objects.get(user=user)
+    universities = University.objects.all()
+    reviews = Review.objects.filter(user=user.userprofile)
+    context = {"universities": universities, "reviews": reviews, "user": user, "user_profile": user_profile}
+    template_name = 'dorm_guide_app/my_account.html'
+    return render(request, template_name, context)
 
 
 @login_required
-def add_review(request, accommodation_id):
-    """Adds a new review to an accommodation."""
-    accommodation = get_object_or_404(Accommodation, id=accommodation_id)
+def delete_account(request, user_id):
+    logout(request)
+
+    user = User.objects.get(id=user_id)
+    user_profile = UserProfile.objects.get(user=user)
+
+    user_profile.delete()
+    user.delete()
+
+    return redirect("/dorm-guide/")
+
+
+def custom_logout(request):
+    logout(request)
+    return redirect('index')
+
+
+def universities(request):
+    universities = University.objects.all()
+    accommodations = Accommodation.objects.all()
+    context = {"universities": universities, "accommodations": accommodations}
+    template_name = 'dorm_guide_app/universities.html'
+    return render(request, template_name, context)
+
+
+def university(request, university_slug):
+    universities = University.objects.all()
+
+    try:
+        university = University.objects.get(slug=university_slug)
+        accommodations = Accommodation.objects.filter(university=university)
+    except University.DoesNotExist:
+        university = None
+        accommodations = None
+
+    if university is None:
+        return redirect('/dorm-guide/')
+
+    context = {"universities": universities, "university": university, "accommodations": accommodations}
+    template_name = 'dorm_guide_app/university.html'
+    return render(request, template_name, context)
+
+
+def accommodation(request, university_slug, accommodation_slug):
+    universities = University.objects.all()
+
+    try:
+        accommodation = Accommodation.objects.get(slug=accommodation_slug)
+        university = accommodation.university
+        reviews = Review.objects.filter(accommodation=accommodation).order_by('-datetime')
+
+        avg_rating = 0
+        for review in reviews:
+            rating = review.rating
+            avg_rating += rating
+
+        rating_no = reviews.count()
+        if rating_no >= 1:
+            avg_rating /= rating_no
+            avg_rating = round(avg_rating, 1)
+
+    except Accommodation.DoesNotExist:
+        accommodation = None
+        university = None
+        avg_rating = None
+        rating_no = None
+    except Review.DoesNotExist:
+        reviews = None
+        avg_rating = None
+        rating_no = None
+
+    user_profile = None
+    if request.user.is_authenticated:
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+        except UserProfile.DoesNotExist:
+            pass
 
     if request.method == 'POST':
         form = ReviewForm(request.POST, request.FILES)
-
         if form.is_valid():
             review = form.save(commit=False)
             review.accommodation = accommodation
-            review.user = request.user
+            review.user = user_profile
             review.save()
-
-            logger.info(f"Added review {review.title} by {request.user.username}")
-            return redirect('accommodation_detail', accommodation_id=accommodation_id)
-        else:
-            logger.warning(f"Invalid review form submission by {request.user.username}")
-
-    return render(request, 'dorm_guide/add_review.html', {'form': form, 'accommodation': accommodation})
-
-
-@login_required
-def like_review(request, review_id):
-    """Increments the like count of a review."""
-    review = get_object_or_404(Review, id=review_id)
-    review.likes += 1
-    review.save()
-
-    logger.info(f"Review {review.title} liked. Total likes: {review.likes}")
-    return JsonResponse({'likes': review.likes})
-
-
-def search(request):
-    """Search for accommodations or universities."""
-    query = request.GET.get('q', '')
-    results = []
-
-    if query:
-        results = Accommodation.objects.filter(
-            Q(name__icontains=query) | Q(description__icontains=query)
-        ) | University.objects.filter(
-            Q(name__icontains=query) | Q(description__icontains=query)
-        )
-
-    logger.info(f"Search query: '{query}' returned {len(results)} results.")
-    return render(request, 'dorm_guide/search_results.html', {'results': results, 'query': query})
-
-
-@login_required
-def edit_profile(request):
-    """Edit the user's profile."""
-    user_profile = get_object_or_404(UserProfile, user=request.user)
-
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
-        if form.is_valid():
-            form.save()
-            return redirect('profile') 
+            return redirect('.')
     else:
-        form = UserProfileForm(instance=user_profile)
+        form = ReviewForm()
 
-    return render(request, 'dorm_guide/edit_profile.html', {'form': form})
+    context = {"universities": universities, "accommodation": accommodation, "university": university,
+               "reviews": reviews, "avg_rating": avg_rating, "rating_no": rating_no, "form": form,
+               "user_profile": user_profile}
+    template_name = 'dorm_guide_app/accommodation.html'
+    return render(request, template_name, context)
+
+
+def add_like(request):
+    if request.method == "POST":
+        pk = request.POST["pk"]
+
+        try:
+            review = Review.objects.get(pk=pk)
+            review.likes += 1
+            review.save()
+        except Review.DoesNotExist:
+            pass
+    return HttpResponse()
+
+
+@login_required
+def logout_account(request):
+    logout(request)
+
+    return redirect("/dorm-guide/")
