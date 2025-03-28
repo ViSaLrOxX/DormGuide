@@ -27,8 +27,9 @@ ALLOWED_HOSTS = [
     'localhost', 
     '127.0.0.1', 
     'dorm-guide.pythonanywhere.com',  
-    os.getenv('PYTHONANYWHERE_DOMAIN', 'your-pythonanywhere-username.pythonanywhere.com')  
+    os.getenv('PYTHONANYWHERE_DOMAIN', 'your-pythonanywhere-username.pythonanywhere.com') or 'localhost'
 ]
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
