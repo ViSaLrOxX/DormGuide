@@ -7,3 +7,4 @@ Pillow==9.4.0
 pytz==2022.7.1
 soupsieve==2.4
 sqlparse==0.4.3
+pip freeze > requirements.txt
