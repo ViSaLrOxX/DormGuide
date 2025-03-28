@@ -5,6 +5,12 @@ import django.contrib.gis.gdal
 
 from dotenv import load_dotenv
 load_dotenv()
+print("DATABASE_NAME:", os.getenv('DATABASE_NAME'))
+print("DATABASE_USER:", os.getenv('DATABASE_USER'))
+print("DATABASE_PASSWORD:", os.getenv('DATABASE_PASSWORD'))
+print("DATABASE_HOST:", os.getenv('DATABASE_HOST'))
+print("DATABASE_PORT:", os.getenv('DATABASE_PORT'))
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = BASE_DIR / 'templates'
@@ -24,10 +30,10 @@ DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 ENV = os.getenv('DJANGO_ENV', 'production')
 
 ALLOWED_HOSTS = [
-    'localhost', 
-    '127.0.0.1', 
-    'dorm-guide.pythonanywhere.com',  
-    os.getenv('PYTHONANYWHERE_DOMAIN', 'your-pythonanywhere-username.pythonanywhere.com') or 'localhost'
+    'localhost',
+    '127.0.0.1',
+    'dorm-guide.pythonanywhere.com',
+    os.getenv('PYTHONANYWHERE_DOMAIN', 'your-pythonanywhere-username.pythonanywhere.com')
 ]
 
 
@@ -80,11 +86,11 @@ WSGI_APPLICATION = 'dorm_guide.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'your_db_name',
-        'USER': 'your_db_user',
-        'PASSWORD': 'your_db_password',
-        'HOST': 'localhost',
-        'PORT': '5432', 
+        'NAME': os.getenv('DATABASE_NAME', 'your_db_name'),
+        'USER': os.getenv('DATABASE_USER', 'your_db_user'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'your_db_password'),
+        'HOST': os.getenv('DATABASE_HOST', 'localhost'),
+        'PORT': os.getenv('DATABASE_PORT', '5432'),
     }
 }
 
