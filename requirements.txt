@@ -1,10 +1,9 @@
 beautifulsoup4==4.11.2
 Django>=5.1.7
-django-bootstrap-v5
+django-bootstrap5
 django-leaflet==0.28.3
 django-registration-redux==2.2
 Pillow==9.4.0
 pytz==2022.7.1
 soupsieve==2.4
 sqlparse==0.4.3
-wincertstore==0.2
