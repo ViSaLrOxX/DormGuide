@@ -116,5 +116,9 @@ print("DEBUG:", DEBUG)
 print("ENV:", ENV)
 print("ALLOWED_HOSTS:", ALLOWED_HOSTS)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'dorm-guide.pythonanywhere.com']
-
+ALLOWED_HOSTS = [
+    'localhost', 
+    '127.0.0.1', 
+    'dorm-guide.pythonanywhere.com',  
+    os.getenv('PYTHONANYWHERE_DOMAIN', 'your-pythonanywhere-username.pythonanywhere.com')  
+]
