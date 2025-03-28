@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dorm_guide_app',
-   'django_registration',
+    'django_registration',
     'django_bootstrap5',
     'leaflet'
 ]
@@ -127,3 +127,4 @@ MEDIAFILES_DIRS = [
 
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
+
