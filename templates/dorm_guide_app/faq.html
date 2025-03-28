@@ -5,45 +5,50 @@
 {% endblock %}
 
 {% block content %}
-<section class="container my-5">
-    <div class="text-center mb-4">
-        <h2 class="text-primary fw-bold">Frequently Asked Questions</h2>
-        <p class="lead">Here are some answers to our most common queries.</p>
-    </div>
+    <section>
+        <h2 class="text-center mb-4 pb-2 text-primary fw-bold">FAQ</h2>
+        <p class="text-center mb-5">
+            Here are some answers to our most frequently asked questions
+        </p>
 
-    <div class="row justify-content-center g-4">
-        
-        <div class="col-md-5 col-lg-4 shadow-sm p-4 bg-body rounded">
-            <h6 class="text-primary mb-3"><i class="fas fa-info-circle"></i> What is DormGuide?</h6>
-            <p>DormGuide is a platform designed to help students find the best accommodations for their needs, offering user-friendly search and review features.</p>
+        <div class="row justify-content-center">
+            <div class="col-md-4 col-lg-4 mb-5 shadow p-3 bg-body rounded mx-1">
+                <h6 class="mb-3 text-primary"><i class="fas fa-pen-alt text-primary"></i> How do I leave a review?</h6>
+                <p>
+                    To leave a review, you'll need to be a student at one of our supported universities and register
+                    your account with your student email. <br>Once logged in, you'll be able to review any accommodation
+                    provided by your university.
+                </p>
+            </div>
+
+            <div class="col-md-4 col-lg-4 mb-5 shadow p-3 bg-body rounded mx-1">
+                <h6 class="mb-3 text-primary"><i class="fas fa-star"></i> Are your reviews trustworthy?</h6>
+                <p>
+                    <strong>Yes.</strong><br>All reviews on the site are made by verified students at each institution.
+                    <br> We will never edit reviews upon an institutions request.
+                </p>
+            </div>
         </div>
+        <div class="row justify-content-center">
+            <div class="col-md-4 col-lg-4 shadow p-3 bg-body rounded mx-1">
+                <h6 class="mb-3 text-primary"><i class="fas fa-graduation-cap text-primary"></i> I can't find my
+                    University on the site
+                </h6>
+                <p>
+                    Sorry about that!<br>If your University is not listed on our website you can <a
+                        href="{% url 'dorm-guide:contact_us' %}">contact us</a> and request we add it.
+                </p>
+            </div>
 
-        <div class="col-md-5 col-lg-4 shadow-sm p-4 bg-body rounded">
-            <h6 class="text-primary mb-3"><i class="fas fa-user-plus"></i> How do I create an account?</h6>
-            <p>Click the "Sign Up" button on the homepage and fill in your details, such as name, email, and password.</p>
+            <div class="col-md-4 col-lg-4 shadow p-3 bg-body rounded mx-1">
+                <h6 class="mb-3 text-primary"><i class="fas fa-wallet text-primary"></i> Is Dorm Guide free to use?
+                </h6>
+                <p>
+                    Yes, Dorm Guide is free to use for everyone and always will be.
+                </p>
+            </div>
+
         </div>
-
-        <div class="col-md-5 col-lg-4 shadow-sm p-4 bg-body rounded">
-            <h6 class="text-primary mb-3"><i class="fas fa-heart"></i> How do I add properties to my favorites?</h6>
-            <p>Once logged in, click the heart icon or "Add to Favorites" button on a property listing to save it to your profile.</p>
-        </div>
-
-        <div class="col-md-5 col-lg-4 shadow-sm p-4 bg-body rounded">
-            <h6 class="text-primary mb-3"><i class="fas fa-comments"></i> Can I contact property owners through DormGuide?</h6>
-            <p>Yes, you can contact property owners through the "Contact" button provided on each property listing page.</p>
-        </div>
-
-        <div class="col-md-5 col-lg-4 shadow-sm p-4 bg-body rounded">
-            <h6 class="text-primary mb-3"><i class="fas fa-trash-alt"></i> How do I remove a property from my favorites?</h6>
-            <p>Go to your profile, locate the property under your favorite listings, and click the "Remove" button.</p>
-        </div>
-    </div>
-
-    <div class="text-center mt-5">
-        <a href="{% url 'dormguide:contact_us' %}" class="btn btn-danger px-4 py-2">
-            Contact Us for More Help
-        </a>
-    </div>
-</section>
-{% endblock %}
+    </section>
+{% endblock content %}
 
