@@ -8,3 +8,4 @@ soupsieve==2.4
 sqlparse==0.4.3
 psycopg2==2.9.3  
 django-extensions==3.2.3
+django-registration-redux
