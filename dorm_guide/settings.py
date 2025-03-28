@@ -5,6 +5,8 @@ from pathlib import Path
 import ctypes
 import django.contrib.gis.gdal
 
+print("DEBUG:", DEBUG)
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = BASE_DIR / 'templates'
 STATIC_DIR = BASE_DIR / 'static'
