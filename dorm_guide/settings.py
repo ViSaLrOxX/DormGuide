@@ -24,7 +24,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.gis',  
     'dorm_guide_app',
-    'django_registration',
     'django_bootstrap5',
     'leaflet'
 ]
