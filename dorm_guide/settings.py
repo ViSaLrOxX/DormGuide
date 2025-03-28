@@ -23,7 +23,13 @@ SECRET_KEY = '7sww&gvkvd)ykx&kw3+u326n^s2jt#uz0f6bj1ttel$&p$ps*('
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 ENV = os.getenv('DJANGO_ENV', 'production')
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'dorm-guide.pythonanywhere.com',
+    os.getenv('PYTHONANYWHERE_DOMAIN', 'https://visroxx.pythonanywhere.com/')
+]
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
