@@ -5,38 +5,25 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-lg-6">
-            <div class="card shadow-sm rounded">
-                <div class="card-body">
-                    <h2 class="text-primary mb-4 fw-bold text-center">Log In</h2>
+    <div class="col-lg-1 justify-content-center mx-auto w-25">
+        <div class="row justify-content-center mb-3">
+            <h2 class="text-primary mb-4 fw-bold text-center">Log In</h2>
 
-                    <form method="post" action=".">
-                        {% csrf_token %}
-                        
-                        
-                        <div class="mb-3">
-                            {{ form.as_p }}
-                        </div>
+            <form method="post" action=".">
+                {% csrf_token %}
 
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">Log In</button>
-                        </div>
+                {{ form.as_p }}
 
-                        <input type="hidden" name="next" value="{{ next }}" />
-                    </form>
-
-                    <div class="text-center mt-3">
-                        <span>Don't have an account? 
-                            <a href="{% url 'dormguide:registration_register' %}" class="btn btn-success btn-sm ms-2">
-                                Register
-                            </a>
-                        </span>
-                    </div>
-                </div>
-            </div>
+                <input type="submit" value="Log In"/>
+                <input type="hidden" name="next" value="{{ next }}"/>
+            </form>
+        </div>
+        <div class="row justify-content-center">
+            <span>Don't have an account? <a href="{% url 'dorm-guide:registration_register' %}">
+            <button type="button" class="btn btn-success">Register</button></a></span>
         </div>
     </div>
-</div>
-{% endblock %}
+    </div>
+
+{% endblock content %}
+</html>
