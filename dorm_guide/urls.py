@@ -1,4 +1,4 @@
-"""dorm_guide URL Configuration
+"""dorm_guidee URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
@@ -22,6 +22,6 @@ from dorm_guide_app import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('admin/', admin.site.urls),
-    path('accounts/', include('registration.backends.simple.urls')),
+    path('accounts/', include('django_registration.backends.activation.urls')),
     path('dorm-guide/', include('dorm_guide_app.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
