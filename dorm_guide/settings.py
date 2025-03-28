@@ -109,8 +109,9 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [STATIC_DIR]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 LOGIN_REDIRECT_URL = '/dorm-guide/'  
 LOGOUT_REDIRECT_URL = '/'
