@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 {% load staticfiles %}
-{% load leaflet_tags %}
+ {% load leaflet_tags %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 <html lang="en">
@@ -49,7 +49,7 @@
                 </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="navbar-brand text-light" href="{% url 'dorm-guide:my_account' user.id %}">
+                    <a class="navbar-brand text-light" href="{% url 'dorm-guidee:my_account' user.id %}">
                         My Account
                         <img src="{% if user_profile.picture %}{{ user_profile.picture }}{% else %}{% static 'images/default_pp.png' %}{% endif %}" class="rounded" height="45px;" width="50px;" style="margin-left: 10px;">
                     </a>
@@ -71,73 +71,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
-</body>
-</html>
-
-
-{% load static %}
-{% load leaflet_tags %} 
-{% load csrf_token %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title_block %}{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {% leaflet_js %}
-    {% leaflet_css %}
-</head>
-<body>
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'dorm-detective:index' %}">Dorm Detective</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'dorm-detective:index' %}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'dorm-detective:about' %}">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'dorm-detective:universities' %}">Universities</a>
-                </li>
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'dorm-detective:auth_logout' %}">Logout</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'dorm-detective:auth_login' %}">Login</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<form id="csrf" style="display: none;">
-    {% csrf_token %}
-</form>
-
-<div class="content-container container mt-5">
-    {% block content %}
-    {% endblock %}
-</div>
-
-<footer class="bg-dark text-white text-center py-3 mt-5">
-    <p>&copy; 2025 Dorm Detective. All Rights Reserved.</p>
-</footer>
-
-<script src="{% static 'js/addLike.js' %}"></script>
-
 </body>
 </html>
