@@ -7,6 +7,8 @@ MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 
 GDAL_LIBRARY_PATH = '/opt/homebrew/Cellar/gdal/3.10.2_3/lib/libgdal.dylib'
 
+GEOS_LIBRARY_PATH = '/opt/homebrew/Cellar/geos/3.13.1/lib/libgeos_c.dylib'
+
 SECRET_KEY = '7sww&gvkvd)ykx&kw3+u326n^s2jt#uz0f6bj1ttel$&p$ps*('
 
 DEBUG = True
