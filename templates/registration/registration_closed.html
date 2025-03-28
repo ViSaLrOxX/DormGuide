@@ -5,18 +5,13 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm rounded p-5 text-center">
-                <h2 class="text-primary fw-bold mb-4">Registration Closed</h2>
-                <p class="lead">Unfortunately, registration is currently closed. Please try again later!</p>
+    <div class="d-flex flex-column col-8 mx-auto align-items-center justify-content-center">
+        <div class="row w-100 mb-5">
+            <h2 class="text-center text-primary mb-4 fw-bold">Registration Closed</h2>
+        </div>
 
-                <div class="mt-4">
-                    <a href="{% url 'dormguide:index' %}" class="btn btn-outline-secondary">Return to Home</a>
-                </div>
-            </div>
+        <div clas="row w-100">
+            <p class="text-center">Unfortunately, registration is currently closed. Please try again later!</p>
         </div>
     </div>
-</div>
-{% endblock %}
+{% endblock content %}
