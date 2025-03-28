@@ -31,11 +31,11 @@ DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 ENV = os.getenv('DJANGO_ENV', 'production')
 
 ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    'dorm-guide.pythonanywhere.com',
-    os.getenv('PYTHONANYWHERE_DOMAIN', 'your-pythonanywhere-username.pythonanywhere.com')
+    'localhost',    
+    '127.0.0.1',   
+    'https://visroxx.pythonanywhere.com/',  
 ]
+
 
 
 INSTALLED_APPS = [
