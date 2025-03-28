@@ -15,19 +15,17 @@ except Exception:
     GDAL_LIBRARY_PATH = None
     GEOS_LIBRARY_PATH = None
 
-
 SECRET_KEY = '7sww&gvkvd)ykx&kw3+u326n^s2jt#uz0f6bj1ttel$&p$ps*('
 
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 ENV = os.getenv('DJANGO_ENV', 'production')
 
-if ENV == 'local':
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-else:
-    ALLOWED_HOSTS = ['dorm-guide.pythonanywhere.com']
-
-if DEBUG:
-    ALLOWED_HOSTS += ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = [
+    'localhost', 
+    '127.0.0.1', 
+    'dorm-guide.pythonanywhere.com',  
+    os.getenv('PYTHONANYWHERE_DOMAIN', 'your-pythonanywhere-username.pythonanywhere.com')  
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
