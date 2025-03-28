@@ -8,7 +8,6 @@ TEMPLATE_DIR = BASE_DIR / 'templates'
 STATIC_DIR = BASE_DIR / 'static'
 MEDIA_DIR = BASE_DIR / 'media'
 
-# GDAL and GEOS paths
 try:
     GDAL_LIBRARY_PATH = ctypes.util.find_library('gdal') or django.contrib.gis.gdal.libgdal_path()
     GEOS_LIBRARY_PATH = ctypes.util.find_library('geos_c') or django.contrib.gis.gdal.libgdal_path()
