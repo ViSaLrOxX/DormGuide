@@ -1,10 +1,10 @@
+from dotenv import load_dotenv
+load_dotenv()
 import os
 from pathlib import Path
 import ctypes
 import django.contrib.gis.gdal
 
-from dotenv import load_dotenv
-load_dotenv()
 print("DATABASE_NAME:", os.getenv('DATABASE_NAME'))
 print("DATABASE_USER:", os.getenv('DATABASE_USER'))
 print("DATABASE_PASSWORD:", os.getenv('DATABASE_PASSWORD'))
